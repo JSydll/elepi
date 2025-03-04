@@ -1,0 +1,4 @@
+.vscode
+work/*
+!**/.gitkeep
+**/__pycache__

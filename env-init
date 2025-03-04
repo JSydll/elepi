@@ -1,0 +1,14 @@
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+# Environment
+# ----
+KAS_CMD="KAS_WORK_DIR=${SCRIPT_DIR}/work ${SCRIPT_DIR}/tools/build/kas-container.4.5"
+KAS_CONF="${SCRIPT_DIR}/config/kas-project.yml"
+# ----
+
+# Build
+# ----
+alias build-shell="${KAS_CMD} shell ${KAS_CONF}"
+alias build-image="${KAS_CMD} build ${KAS_CONF}"
+# ----
