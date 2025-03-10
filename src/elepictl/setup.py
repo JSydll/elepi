@@ -7,9 +7,10 @@ setup(
     entry_points={
         'console_scripts': [
             'elepictl = elepictl.cli:main',
+            'elepid = elepictl.daemon:main',
         ],
     },
     install_requires=[
-        # No dependencies so far
+        'python3-pydbus'
     ],
 )

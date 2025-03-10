@@ -174,7 +174,7 @@ class Adventure:
         return self._active_quest
 
     @property
-    def progress(self) -> tuple(int, int):
+    def progress(self) -> tuple[int, int]:
         """
         Provides the current progress of the adventure.
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=elePi adventure control daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/elepid
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

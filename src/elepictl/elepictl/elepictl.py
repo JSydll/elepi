@@ -1,23 +1,45 @@
+"""
+elepictl.py
+
+Provides the ElePiCtl class to interact with the adventure.
+Comes with a dbus service definition.
+"""
+
+import textwrap
+
 from elepictl.adventure import Adventure
 
 class ElePiCtl:
+    """
+    <node>
+        <interface name='com.elepi.ElePiCtl'>
+            <method name='info'><arg type='s' name='response' direction='out'/></method>
+            <method name='hint'><arg type='s' name='response' direction='out'/></method>
+            <method name='solve'>
+                <arg type='s' name='solution_code' direction='in'/>
+                <arg type='(bs)' name='msg' direction='out'/>
+            </method>
+            <method name='reset'><arg type='b' name='response' direction='out'/></method>
+        </interface>
+    </node>
+    """
 
     def __init__(self):
         self._adventure = Adventure()
 
     # --- Private ---
 
-    def _quest_info(self) -> None:
+    def _quest_info(self) -> str:
         quest_info = f"""
         Current quest: {self._adventure.active_quest.name}
 
         {self._adventure.active_quest.description}
         """
-        print(quest_info)
+        return textwrap.dedent(quest_info)
 
     # --- Public ---
 
-    def info(self) -> None:
+    def info(self) -> str:
         solved_count, total_count = self._adventure.progress
         general_info = f"""
         Welcome, brave soul, to this learning adventure!
@@ -31,40 +53,33 @@ class ElePiCtl:
         fragments to assemble the solution code.
 
         So far, you have solved {solved_count} of {total_count} quests in this adventure.
-
+        ____________________________________________________________________________________
         """
-        print(general_info)
-        self._quest_info()
+        return textwrap.dedent(general_info + self._quest_info())
     
-    def hint(self) -> None:
-        hint = self._adventure.active_quest.next_hint
-        print(hint)
+    def hint(self) -> str:
+        return self._adventure.active_quest.next_hint
 
-
-    def solve(self, solution_code: str) -> None:
+    def solve(self, solution_code: str) -> tuple[bool, str]:
+        # TODO: Extend failure handling here
         if not self._adventure.active_quest.verify(solution_code):
-            print("Sorry, this is not correct yet - try again ;)")
-            return
+            return False, "Sorry, this is not correct yet - try again ;)"
         
-        print("Congratulations! You have solved the quest!\n")
+        msg = "Congratulations! You have solved the quest!\n"
 
         if not self._adventure.activate_next_quest():
-            msg = """
+            msg += """
             ...even better: You have completed all quests!
 
             You are now ready for the next adventure.
             """
-            print(msg)
-            return
+            return True, msg
 
-        print("The next quest is already waiting for you:\n")
-        self._quest_info()
+        msg += "The next quest is already waiting for you:\n"
+        return True, textwrap.dedent(msg + self._quest_info())
 
 
-    def reset(self) -> None:
-        print("""
-        Resetting the state of the current quest...
-        Note that any changes not belonging to the quest might stay around.
-        """)
+    def reset(self) -> bool:
+        # TODO: Add failure handling here
         self._adventure.reset_quest()
-        print("Done! You can start tinkering again.")
+        return True

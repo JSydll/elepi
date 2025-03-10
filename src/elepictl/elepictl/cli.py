@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
+"""
+Commandline application to control the elePi adventure.
+
+Interacts with the privileged dbus service to perform
+actual commands.
+"""
 
 import argparse
-from elepictl.elepictl import ElePiCtl
+import textwrap
 
+from pydbus import SystemBus as DBus
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Application to interact with the current elePi quest.")
+        description="Application to interact with the current elePi adventure.")
         
     command_parsers = parser.add_subparsers(dest="command")
     command_parsers.add_parser(
@@ -24,16 +31,28 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    ctl = ElePiCtl()
+    bus = DBus()
+    elepictl = bus.get('org.elepi.elepictl')
 
     if args.command == "info":
-        ctl.info()
+        print(elepictl.info())
+
     elif args.command == "hint":
-        ctl.hint()
+        print(elepictl.hint())
+
     elif args.command == "reset":
-        ctl.reset()
+        print(textwrap.dedent("""
+        Resetting the state of the current quest...
+        Note that any changes not belonging to the quest might stay around.
+        """))
+        if elepictl.reset():
+            print("Done! You can start tinkering again.")
+
     elif args.command == "solve":
-        ctl.solve(args.solution_code)
+        # TODO: Decide whether the return code should be checked here
+        _, msg = elepictl.solve(args.solution_code)
+        print(msg)
+
     else:
         parser.print_help()
 
