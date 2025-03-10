@@ -45,13 +45,16 @@ def main() -> None:
         Resetting the state of the current quest...
         Note that any changes not belonging to the quest might stay around.
         """))
-        if elepictl.reset():
+        if elepictl.reset_quest():
             print("Done! You can start tinkering again.")
 
     elif args.command == "solve":
-        # TODO: Decide whether the return code should be checked here
-        _, msg = elepictl.solve(args.solution_code)
+        success, msg = elepictl.verify_quest(args.solution_code)
         print(msg)
+        if success:
+            # TODO: Decide whether the return code should be checked here
+            _, msg = elepictl.complete_quest()
+            print(msg)
 
     else:
         parser.print_help()
