@@ -69,7 +69,7 @@ do_deploy_adventure_data() {
     install -d ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests
 
     for quest in ${QUESTS_LIST}; do
-        cp ${DEPLOY_DIR_RPM}/${TUNE_PKGARCH}/${quest}-[0-9]*.rpm ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests/${quest}.rpm
+        find ${DEPLOY_DIR_RPM} -type f -name "${quest}-[0-9]*.rpm" -exec cp {} ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests/${quest}.rpm ';'
     done
 
     echo "${ADVENTURE_META_DATA}" | sed 's/@/"/g' > ${IMAGE_ROOTFS}${datadir}/elepi/adventure/${ADVENTURE_META_FILE}

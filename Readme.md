@@ -29,7 +29,7 @@ There are different types of quests:
 - **Discovery**:
   _You need to use a certain Linux feature to complete the quest._
 
-In all cases, you'll eventually retrieve a **solution code** - a string of **512 hex numbers**.
+In all cases, you'll eventually retrieve a **solution code** - a string of **128 hex numbers**.
 This can then be used to complete the quest with the help of the `elepictl solve <code>` command,
 which will automatically bring up the next quest for you.
 

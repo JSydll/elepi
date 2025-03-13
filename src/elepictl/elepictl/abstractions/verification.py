@@ -52,7 +52,7 @@ class Verification:
 
         result = subprocess.run(
             [
-                "openssl", "dgst", "-sha512", "-verify", key_path,
+                "openssl", "dgst", "-sha1", "-verify", key_path,
                 "-signature", "/dev/stdin", token_path
             ],
             input=signature,

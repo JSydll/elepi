@@ -1,10 +1,8 @@
 inherit elepi-quest
 
-QUEST_DESCRIPTION = "Enable a kernel module that exposes a sysfs (to be queried for the solution)"
-QUEST_HINT_FILES  = ""
+QUEST_HINTS_DIR = ""
 
-SRC_URI = " \
-    file://verification.key \
+SRC_URI += " \
     file://solution.hex \
 "
 

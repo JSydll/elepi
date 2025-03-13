@@ -1,11 +1,8 @@
-
 inherit elepi-quest
 
-QUEST_DESCRIPTION = "Reveal a file shadowed in an underlay"
-QUEST_HINT_FILES  = ""
+QUEST_HINTS_DIR = ""
 
-SRC_URI = " \
-    file://verification.key \
+SRC_URI += " \
     file://solution.hex \
 "
 

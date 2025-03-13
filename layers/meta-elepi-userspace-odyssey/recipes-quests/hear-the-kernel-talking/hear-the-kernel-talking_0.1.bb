@@ -1,10 +1,8 @@
 inherit elepi-quest
 
-QUEST_DESCRIPTION = "Find sth in klog"
-QUEST_HINT_FILES  = ""
+QUEST_HINTS_DIR  = ""
 
 SRC_URI = " \
-    file://verification.key \
     file://solution.hex \
 "
 

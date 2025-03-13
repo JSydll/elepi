@@ -10,7 +10,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 QUEST_NAME="$1"
-KEY_LEN=2048
+KEY_LEN=512
 
 mkdir -p "${WORKDIR}"
 
@@ -20,9 +20,9 @@ openssl rsa -in "${WORKDIR}/${QUEST_NAME}.key" -pubout -out "${WORKDIR}/${QUEST_
 
 # Create the solution signature (both binary and as hex representation)
 echo "Creating solution signatures"
-openssl dgst -sha512 -sign "${WORKDIR}/${QUEST_NAME}.key" -out "${WORKDIR}/${QUEST_NAME}-solution.sign" "${SOLUTION_TOKEN_PATH}"
+openssl dgst -sha1 -sign "${WORKDIR}/${QUEST_NAME}.key" -out "${WORKDIR}/${QUEST_NAME}-solution.sign" "${SOLUTION_TOKEN_PATH}"
 xxd -p "${WORKDIR}/${QUEST_NAME}-solution.sign" "${WORKDIR}/${QUEST_NAME}-solution.hex"
 
 # Verify the created signatures
-openssl dgst -sha512 -verify "${WORKDIR}/${QUEST_NAME}.verification.key" -signature "${WORKDIR}/${QUEST_NAME}-solution.sign" "${SOLUTION_TOKEN_PATH}"
-xxd -r -p "${WORKDIR}/${QUEST_NAME}-solution.hex" | openssl dgst -sha512 -verify "${WORKDIR}/${QUEST_NAME}.verification.key" -signature /dev/stdin "${SOLUTION_TOKEN_PATH}"
+openssl dgst -sha1 -verify "${WORKDIR}/${QUEST_NAME}.verification.key" -signature "${WORKDIR}/${QUEST_NAME}-solution.sign" "${SOLUTION_TOKEN_PATH}"
+xxd -r -p "${WORKDIR}/${QUEST_NAME}-solution.hex" | openssl dgst -sha1 -verify "${WORKDIR}/${QUEST_NAME}.verification.key" -signature /dev/stdin "${SOLUTION_TOKEN_PATH}"

@@ -19,21 +19,26 @@ the quests, though.
 ## Creating quests
 
 Each quest is shipped as a dedicated Yocto recipe. You only need to inherit the
-`elepi-quest` bbclass and define the key properties of your quest in form of the
+`elepi-quest.bbclass` and define the key properties of your quest in form of the
 following variables:
 
 **Mandatory**:
 
 - `QUEST_DESCRIPTION`: A text file explaining the goal of the quest and possible
-  entrypoints. This will be shown when users call `elepictl info`.
+  entrypoints. This will be shown when users call `elepictl info`. By default,
+  the `elepi-quest.bbclass` assumes a file named `description.txt` to be present
+  under `files`.
 
 - `QUEST_VERIFICATION_KEY`: Path to the public key used to validate the quest's
-  solution code. More on that below.
+  solution code (more on that below). By default, the `elepi-quest.bbclass` assumes
+  a file named `verification.key` to be present under `files`. 
 
 **Optional**:
-- `QUEST_HINT_FILES`: A list of source paths to text files each containing
-  one hint to solve the quest. They will be revealed in the order they appear on the
-  filesystem to the user on calls to `elepictl hint`.
+- `QUEST_HINTS_DIR`: A directory path containing all hint files to be deployed.
+  They will be revealed in the order they appear on the filesystem to the user
+  on calls to `elepictl hint`. By default, the `elepi-quest.bbclass` assumes the
+  directory `hints` to be present under `files`. If you don't want to give any hints,
+  you can define the variable empty.
 
 - `QUEST_SETUP_SCRIPTS`: A list of source paths to bash scripts to be executed in
   the package post-install step, for example to perform runtime-only preparations
@@ -51,8 +56,8 @@ using asymmetric keys and signatures - together with a shared token (aka message
 
 When implementing a quest, you need to do the following:
 
-- create a private-public key pair (RSA, 2048 bits),
-- generate a signature on the token (with SHA512 hashing)
+- create a private-public key pair (RSA, 512 bits),
+- generate a signature on the token (with SHA1 hashing)
 - deploy the public key on the device and 
 - reveal the signature as hexadecimal string to the user on quest completion.
 
@@ -66,22 +71,22 @@ Here is an (abbreviated) example of the output of the helper script:
 ```bash
 <quest-name>.key:
 -----BEGIN PRIVATE KEY-----
-MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC9WRFBEVZM1/TH
+MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEA23TwrYyxENi/y16N
 ...
-DpuYWB1bSWMvf9gRrm933XnHODu2NgNq//ul5Y05091bIA7KrQ3X04C8b2aZG0Oe
-jDp1x42lu2xCxngq+E2KBICc
+h1phuE+Cnu2EbVV+CMksW/DyM976wYZxAiAqLbANXVVGvnj/oQxCz+hL228Zp5Ar
+Nm9ZyeGn4oDRDw==
 -----END PRIVATE KEY-----
 
 <quest-name>.verification.key:
 -----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvVkRQRFWTNf0x6w4UALa
-...
-dyartXzPOzIIt0PLmtpG1KIj+tkNwbJ974F4J6Zh3yQTHrnxUvB9FD/QMKuCSbxr
-0wIDAQAB
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANt08K2MsRDYv8tejZweGf52F58lk6d4
+3p8pOaUzounI9KumdLPy4c6gPaEv9sw4hN9ZjR3+H3kvB43armyz3LMCAwEAAQ==
 -----END PUBLIC KEY-----
 
 <quest-name>-solution.hex:
-090c9e...5571f1
+5fa953556ca6a33ab679c16add2d485eb30a03f5bbcab2f239367bd5a73e
+86ca21410ef03ee7d648176cbbbf48ca5c6d108bea1b9027582d3f51b377
+84d91881
 ```
 
 The `QUEST_VERIFICATION_KEY` variable defaults to `${WORKDIR}/verification.key`,
