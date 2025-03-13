@@ -1,18 +1,44 @@
+# Note: Inheriting module must come first to avoid QA issues
+inherit module
+inherit systemd
+
 inherit elepi-quest
 
-QUEST_HINTS_DIR  = ""
-
-SRC_URI = " \
-    file://solution.hex \
+SRC_URI += " \
+    file://kernel-module/ \
+    \
+    file://postinst.sh \
+    file://prerm.sh \
+    \
+    file://sysctl.d/printk.conf \
+    file://bin/honeypot.sh \
+    file://systemd/honeypot.service \
 "
 
-# Just add one dependency to test handling of it
-RDEPENDS:${PN} += "nano"
+RDEPENDS:${PN}  += "bash"
 
-# For the first spike, simply deploy the solution to somewhere in the system.
-do_install() {
-    install -d ${D}${datadir}
-    install -m 0644 ${WORKDIR}/solution.hex ${D}${datadir}/solution.hex
+QUEST_POSTINST_SCRIPTS = "postinst.sh"
+QUEST_PRERM_SCRIPTS    = "prerm.sh"
+
+S = "${WORKDIR}/kernel-module"
+
+do_install:append() {
+    install -d ${D}${sysconfdir}/sysctl.d
+    install -m 0644 ${WORKDIR}/sysctl.d/printk.conf ${D}${sysconfdir}/sysctl.d/
+    
+    install -d ${D}${bindir}
+    # Note: The script contains a todo marker on purpose, to provide a breadcrumb to follow. 
+    install -m 0644 ${WORKDIR}/bin/honeypot.sh ${D}${bindir}/
+    # For the sake of simplicity, we use a system service here (as systemd.bbclass can
+    # only enable those by default).
+    install -d ${D}${systemd_system_unitdir}
+    install -m 0644 ${WORKDIR}/systemd/honeypot.service ${D}${systemd_system_unitdir}/
 }
 
-FILES:${PN} += "${datadir}/solution.hex"
+SYSTEMD_SERVICE:${PN} = "honeypot.service"
+
+FILES:${PN} += " \
+    ${sysconfdir}/sysctl.d/printk.conf \
+    ${bindir}/honeypot.sh \
+    ${systemd_system_unitdir}/honeypot.service \
+"

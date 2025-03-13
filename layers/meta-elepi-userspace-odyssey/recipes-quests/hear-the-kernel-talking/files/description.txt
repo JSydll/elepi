@@ -1,1 +1,13 @@
-Find sth in klog
+The kernel is an orchestrator behind the scenes - but you can talk to it!
+
+Most of the time, interactions with the kernel are rather invisible.
+Yet, there are means to read what it's doing - and to pass information
+to it from user space... But be aware that not everything that looks
+like a call from the kernel actually originated from there!
+
+For an introduction, you may consult:
+- Vasquez, Simmonds (2021): Mastering Embedded Linux Programming, pp. 111.
+- Love (2010): Linux Kernel Development, pp. 364.
+
+Looking at the system boot might be a good start for the quest, given the
+kernel is heavily involved there...
