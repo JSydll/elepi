@@ -43,7 +43,7 @@ static struct task_struct *event_thread;
 
 static ssize_t on_proc_read(struct file *, char __user *buffer, size_t buffer_length, loff_t *offset)
 {
-    int len = sizeof(readable_fragment); 
+    int len = strlen(readable_fragment); 
     ssize_t ret = len; 
     if (*offset >= len || copy_to_user(buffer, readable_fragment, len)) {
         // Something went wrong
@@ -57,13 +57,11 @@ static ssize_t on_proc_read(struct file *, char __user *buffer, size_t buffer_le
 static ssize_t on_proc_write(struct file *, const char __user *buffer, size_t buffer_length, loff_t *)
 {
     char local_buffer[10];
-    if (buffer_length > sizeof(local_buffer) - 1)
-    {
+    if (buffer_length > sizeof(local_buffer) - 1) {
         return -EINVAL;
     }
 
-    if (copy_from_user(local_buffer, buffer, buffer_length))
-    {
+    if (copy_from_user(local_buffer, buffer, buffer_length)) {
         return -EFAULT;
     }
     local_buffer[buffer_length] = '\0';

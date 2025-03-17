@@ -7,18 +7,12 @@ inherit elepi-quest
 SRC_URI += " \
     file://kernel-module/ \
     \
-    file://postinst.sh \
-    file://prerm.sh \
-    \
     file://sysctl.d/printk.conf \
     file://bin/honeypot.sh \
     file://systemd/honeypot.service \
 "
 
 RDEPENDS:${PN}  += "bash"
-
-QUEST_POSTINST_SCRIPTS = "postinst.sh"
-QUEST_PRERM_SCRIPTS    = "prerm.sh"
 
 S = "${WORKDIR}/kernel-module"
 
@@ -28,7 +22,7 @@ do_install:append() {
     
     install -d ${D}${bindir}
     # Note: The script contains a todo marker on purpose, to provide a breadcrumb to follow. 
-    install -m 0644 ${WORKDIR}/bin/honeypot.sh ${D}${bindir}/
+    install -m 0755 ${WORKDIR}/bin/honeypot.sh ${D}${bindir}/
     # For the sake of simplicity, we use a system service here (as systemd.bbclass can
     # only enable those by default).
     install -d ${D}${systemd_system_unitdir}

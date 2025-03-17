@@ -1,9 +1,13 @@
 [Unit]
 Description=Yummy yummy
-After=run-postinsts.service
+After=systemd-journald.socket
 
 [Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=modprobe kfrag
 ExecStart=/usr/bin/honeypot.sh
+ExecStopPost=rmmod kfrag
 
 [Install]
 WantedBy=multi-user.target

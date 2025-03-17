@@ -42,6 +42,15 @@ python __anonymous() {
     if dependencies:
         d.setVar('RDEPENDS:' + quest_name + '-deps', dependencies)
         d.delVar('RDEPENDS:' + quest_name)
+
+    # To enable a unified installation flow, kernel modules shall not be split 
+    # into a separate package.
+    pkg_split_funcs = d.getVar('PACKAGESPLITFUNCS').split()
+    if 'split_kernel_module_packages' in pkg_split_funcs:
+        pkg_split_funcs.remove('split_kernel_module_packages')
+        d.setVar('PACKAGESPLITFUNCS', ' '.join(pkg_split_funcs))
+        libdir = d.getVar('libdir')
+        d.appendVar('FILES:' + quest_name, libdir + '/modules')
 }
 
 do_install:append() {
