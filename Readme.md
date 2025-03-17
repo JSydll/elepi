@@ -49,7 +49,7 @@ As soon as the system has booted, you can login with `root` and no password (**t
 
 For help on the current quest, just run
 ```bash
-elepictl info
+elepictl status
 ```
 You can get some hints by using the `hint` command or try out a potential solution code of the current
 quest by passing it to `solve`.
