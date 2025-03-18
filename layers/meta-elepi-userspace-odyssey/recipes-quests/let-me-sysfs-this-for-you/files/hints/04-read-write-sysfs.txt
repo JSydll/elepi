@@ -1,0 +1,1 @@
+The files visible in the sysfs might be read-only, write-only or read-writable. When listing the contents of an entry directory, you can see the respective permission bits being set.

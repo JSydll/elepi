@@ -1,0 +1,1 @@
+Sysfs entries may be dynamically added (and removed), especially when drivers for hotplugged peripherals or kernel modules are loaded.

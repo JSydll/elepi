@@ -15,7 +15,7 @@ spawned /proc/kfrag_queue file handle.
 #include <linux/uaccess.h>
 #include <linux/wait.h>
 
-MODULE_LICENSE("MIT");
+MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Joschka Seydell");
 MODULE_DESCRIPTION("Provides elePi solution code fragments when read or awaken via /proc/kfragments.");
 MODULE_VERSION("1.0");

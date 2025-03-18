@@ -1,0 +1,1 @@
+Whereas some implementations may still use /proc as an interface to the kernel, the original idea was to only provide process related information there. All other interactions with the kernel should rather go to /sys.

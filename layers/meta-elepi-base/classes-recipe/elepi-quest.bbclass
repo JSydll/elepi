@@ -36,6 +36,8 @@ python __anonymous() {
     if not description or not verification_key:
         bb.fatal('Please provide both a description and a verification key for the quest.')
 
+    # Split runtime dependencies out into the -deps package 
+    # (which is installed in the adventure image from the start).
     quest_name = d.getVar('PN')
     dependencies = d.getVar('RDEPENDS:' + quest_name)
 
@@ -43,14 +45,24 @@ python __anonymous() {
         d.setVar('RDEPENDS:' + quest_name + '-deps', dependencies)
         d.delVar('RDEPENDS:' + quest_name)
 
-    # To enable a unified installation flow, kernel modules shall not be split 
-    # into a separate package.
+    # Special treatment for quests including a kernel module
     pkg_split_funcs = d.getVar('PACKAGESPLITFUNCS').split()
     if 'split_kernel_module_packages' in pkg_split_funcs:
+        # Avoid splitting into separate packages to enable a unified 
+        # installation flow.
         pkg_split_funcs.remove('split_kernel_module_packages')
         d.setVar('PACKAGESPLITFUNCS', ' '.join(pkg_split_funcs))
+        # Satify QA checks
         libdir = d.getVar('libdir')
         d.appendVar('FILES:' + quest_name, libdir + '/modules')
+        # Allow easy loading of the module after runtime installation
+        workdir = d.getVar('WORKDIR')
+        postinst_file = 'postinst-enable-kernel-modules.sh'
+        with open(workdir + '/' + postinst_file, 'w') as f:
+            f.write('''#!/bin/sh
+            depmod -A
+            ''')
+        d.appendVar('QUEST_POSTINST_SCRIPTS', postinst_file)
 }
 
 do_install:append() {

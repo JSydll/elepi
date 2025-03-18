@@ -1,3 +1,7 @@
 Everything is a file, right? That's the spirit of sysfs!
 
-...
+This virtual filesystem represents system hardware and kernel data structures in a hierarchical manner. It allows user-space programs to interact with kernel objects using a simple file-based interface. So when searching for runtime system properties, you may first take a look here! Note, however, that only active drivers and modules will have entries...
+
+For an introduction, you may consult:
+- Vasquez, Simmonds (2021): Mastering Embedded Linux Programming, pp. 106.
+- Love (2010): Linux Kernel Development, pp. 355.

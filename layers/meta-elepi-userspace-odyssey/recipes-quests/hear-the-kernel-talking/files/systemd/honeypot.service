@@ -7,7 +7,7 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStartPre=modprobe kfrag
 ExecStart=/usr/bin/honeypot.sh
-ExecStopPost=rmmod kfrag
+ExecStopPost=modprobe -r kfrag
 
 [Install]
 WantedBy=multi-user.target

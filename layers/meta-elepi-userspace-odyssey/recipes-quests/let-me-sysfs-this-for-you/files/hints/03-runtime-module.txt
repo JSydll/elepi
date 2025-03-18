@@ -1,0 +1,1 @@
+A kernel module can be loaded via insmod or modprobe. Available modules can be found under /usr/lib/modules.
