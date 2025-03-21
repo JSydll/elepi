@@ -10,9 +10,9 @@ for more details.
 Before adding a new adventure image, please consider adding your quest(s)
 to one of the existing images.
 
-To reduce waiting times when switching between quests, all runtime dependencies
-of all quests contained in an adventure are already installed in the corresponding
-image. Therefore, only data that is directly related to the individual quest is
+To reduce waiting times when switching between quests, _all runtime dependencies_
+_of all quests contained in an adventure are already installed in the corresponding_
+_image_. Therefore, only data that is directly related to the individual quest is
 installed or removed during runtime. This might need some special care when implementing
 the quests, though.
 
@@ -47,7 +47,29 @@ following variables:
 - `QUEST_CLEANUP_SCRIPTS`: A list of source paths to bash scripts to be executed 
   when the quest is removed again, to ensure no changes made during runtime are left.
 
-Besides, you are free to implement whatever recipes usually do.
+### Limitations
+
+There are some things to consider when implementing quests:
+
+**Avoid package splitting**
+
+Given quests are installed during runtime using solely their name as identifier,
+they should be deployed in a single package. Note that some bitbake features come
+with automatic package splitting - a notable example is the `module.bbclass` for
+writing out-of-tree kernel modules. Splitting of packages is deactivated in the
+`elepi-quest.bbclass` for this particular case.
+
+**Do not assume reboots**
+
+Some features like autoloading of kernel modules assume to be activated through a system
+reboot. But as the waiting time between quests should be minimized, this usually does not
+happen, so you may need to activate such features manually, e.g. in the `postinst` script.
+
+**System or kernel configuration can only be adjusted for the whole adventure**
+
+If your quest requires certain kernel or bootloader configuration, for example, this comes
+into effect for all quests in this adventure. Either avoid such side-effects by writing
+runtime `postinst`/`prerm` scripts or ensure no negative impact on other quests.
 
 ### Quest solution and verification
 
