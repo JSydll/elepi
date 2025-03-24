@@ -1,0 +1,19 @@
+rpi-u-boot-scr: Jump to preinit as required by read-only rootfs.
+
+Upstream-Status: Inappropriate [oe specific]
+
+Signed-off-by: Joschka Seydell <joschka@seydell.org>
+
+diff --git a/boot.cmd.in b/boot.cmd.in
+index 61d0acf..de0cefb 100644
+--- a/boot.cmd.in
++++ b/boot.cmd.in
+@@ -31,7 +31,7 @@ for BOOT_SLOT in "${BOOT_ORDER}"; do
+ done
+ 
+ if test -n "${bootpart}"; then
+-  setenv bootargs "${bootargs} root=${bootpart} rauc.slot=${raucslot}"
++  setenv bootargs "${bootargs} root=${bootpart} init=/sbin/preinit rauc.slot=${raucslot}"
+   saveenv
+ else
+   echo "No valid RAUC slot found. Resetting tries to 3"

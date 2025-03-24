@@ -55,7 +55,7 @@ local_conf_header:
 
     # DISTRO
     # ---
-    DISTRO_FEATURES:append = " rauc"
+    DISTRO_FEATURES:append = " rauc overlayfs"
     INIT_MANAGER = "systemd"
 
     # IMAGE
@@ -65,3 +65,6 @@ local_conf_header:
     
     EXTRA_IMAGE_FEATURES += "debug-tweaks"
     EXTRA_IMAGE_FEATURES += "ssh-server-openssh"
+
+    # Overlay for writable application paths
+    OVERLAYFS_MOUNT_POINT[data] = "/data"

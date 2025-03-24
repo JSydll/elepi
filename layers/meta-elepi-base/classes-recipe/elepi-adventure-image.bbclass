@@ -15,8 +15,18 @@ ADVENTURE_META_DATA = ""
 
 inherit core-image
 
+# Setup /etc overlay for read-only rootfs
+OVERLAYFS_ETC_MOUNT_POINT = "/data"
+OVERLAYFS_ETC_FSTYPE = "ext4"
+# Note: Account for legacy (msdos) partition table
+OVERLAYFS_ETC_DEVICE = "/dev/mmcblk0p5"
+OVERLAYFS_ETC_USE_ORIG_INIT_NAME = "0"
+
 # Make sure that not only dnf but also the corresponding configuration is included
 IMAGE_FEATURES += " \
+    read-only-rootfs \
+    read-only-rootfs-delayed-postinsts \
+    overlayfs-etc \
     package-management \
 "
 
@@ -24,6 +34,7 @@ IMAGE_INSTALL = " \
     packagegroup-core-boot \
     ${CORE_IMAGE_EXTRA_INSTALL} \
     \
+    elepi-overlays \
     elepictl \
 "
 

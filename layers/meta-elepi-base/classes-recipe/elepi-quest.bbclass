@@ -54,7 +54,7 @@ python __anonymous() {
         d.setVar('PACKAGESPLITFUNCS', ' '.join(pkg_split_funcs))
         # Satify QA checks
         libdir = d.getVar('libdir')
-        d.appendVar('FILES:' + quest_name, libdir + '/modules')
+        d.appendVar('FILES:' + quest_name, ' ' + libdir + '/modules')
         # Allow easy loading of the module after runtime installation
         workdir = d.getVar('WORKDIR')
         postinst_file = 'postinst-enable-kernel-modules.sh'
