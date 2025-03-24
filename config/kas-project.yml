@@ -61,7 +61,6 @@ local_conf_header:
     # IMAGE
     # ---
     IMAGE_INSTALL:append = " rauc"
-    IMAGE_FSTYPES:append = " ext4"
     
     EXTRA_IMAGE_FEATURES += "debug-tweaks"
     EXTRA_IMAGE_FEATURES += "ssh-server-openssh"

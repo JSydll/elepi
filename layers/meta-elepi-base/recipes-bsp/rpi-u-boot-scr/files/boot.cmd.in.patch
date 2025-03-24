@@ -13,7 +13,7 @@ index 61d0acf..de0cefb 100644
  
  if test -n "${bootpart}"; then
 -  setenv bootargs "${bootargs} root=${bootpart} rauc.slot=${raucslot}"
-+  setenv bootargs "${bootargs} root=${bootpart} init=/sbin/preinit rauc.slot=${raucslot}"
++  setenv bootargs "${bootargs} root=${bootpart} rootfstype=squashfs init=/sbin/preinit rauc.slot=${raucslot}"
    saveenv
  else
    echo "No valid RAUC slot found. Resetting tries to 3"

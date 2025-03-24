@@ -38,7 +38,10 @@ IMAGE_INSTALL = " \
     elepictl \
 "
 
-WKS_FILE = "sdimage-dual-raspberrypi.wks.in"
+IMAGE_FSTYPES:remove = " ext3 ext4"
+IMAGE_FSTYPES:append = " squashfs"
+
+WKS_FILE = "dual-ro-rootfs-raspberrypi.wks.in"
 
 python __anonymous() {
     # As bitbake variable expansion does not support quoted strings well,
