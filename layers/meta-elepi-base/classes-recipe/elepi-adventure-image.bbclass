@@ -14,6 +14,7 @@ ADVENTURE_META_FILE = "meta.json"
 ADVENTURE_META_DATA = ""
 
 inherit core-image
+inherit extrausers
 
 # Setup /etc overlay for read-only rootfs
 OVERLAYFS_ETC_MOUNT_POINT = "/data"
@@ -22,7 +23,15 @@ OVERLAYFS_ETC_FSTYPE = "ext4"
 OVERLAYFS_ETC_DEVICE = "/dev/mmcblk0p5"
 OVERLAYFS_ETC_USE_ORIG_INIT_NAME = "0"
 
-# Make sure that not only dnf but also the corresponding configuration is included
+# Setup unprivileged user
+EXTRA_USERS_PARAMS:append = " \
+    groupadd --gid ${ELEPI_GID} ${ELEPI_GROUP}; \
+    useradd --uid ${ELEPI_UID} --groups sudo,${ELEPI_GROUP} \
+        --home-dir /home/${ELEPI_USER} --shell /usr/bin/sh \
+        --password '${ELEPI_PASSWORD}' ${ELEPI_USER}; \
+"
+
+# Populate image contents
 IMAGE_FEATURES += " \
     read-only-rootfs \
     read-only-rootfs-delayed-postinsts \
@@ -33,6 +42,9 @@ IMAGE_FEATURES += " \
 IMAGE_INSTALL = " \
     packagegroup-core-boot \
     ${CORE_IMAGE_EXTRA_INSTALL} \
+    \
+    sudo \
+    rauc \
     \
     elepi-overlays \
     elepictl \

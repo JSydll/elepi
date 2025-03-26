@@ -45,7 +45,7 @@ What you'll need:
 
 Then, start by flashing the adventure image on the SD card and connecting everything.
 
-As soon as the system has booted, you can login with `root` and no password (**this will change**).
+As soon as the system has booted, you can login with `somebody` and the password `fortytwo`.
 
 For help on the current quest, just run
 ```bash

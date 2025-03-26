@@ -1,0 +1,1 @@
+sysfs entries are exposed by the kernel with root ownership, so unprivileged users may need to sudo su, pipe echo to a sudo'ed tee, spawn a root-shell or get privileges to run an executable that can write to the sysfs. 

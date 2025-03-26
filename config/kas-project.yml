@@ -48,6 +48,9 @@ local_conf_header:
     # ---
     PACKAGE_CLASSES = "package_rpm"
 
+    hostname:pn-base-files = "elepi"
+    DISTRO_NAME:pn-base-files = "elepi-os"
+
     # MACHINE
     # ---
     ENABLE_UART = "1"
@@ -60,10 +63,4 @@ local_conf_header:
 
     # IMAGE
     # ---
-    IMAGE_INSTALL:append = " rauc"
-    
-    EXTRA_IMAGE_FEATURES += "debug-tweaks"
-    EXTRA_IMAGE_FEATURES += "ssh-server-openssh"
-
-    # Overlay for writable application paths
     OVERLAYFS_MOUNT_POINT[data] = "/data"

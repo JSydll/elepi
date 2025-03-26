@@ -10,7 +10,9 @@ QUEST_VERIFICATION_KEY[doc] = "The public key used to verify the signature of th
                                Defaults to a file named 'verification.key'."
 QUEST_HINTS_DIR[doc]        = "The directory containing the hint files to deploy. Defaults to 'hints'."
 QUEST_POSTINST_SCRIPTS[doc] = "Scripts to be deployed on the device and executed when the quest is started."
-QUEST_PRERM_SCRIPTS[doc]    = "Scripts to be deployed on the device and executed when the quest was completed." 
+QUEST_PRERM_SCRIPTS[doc]    = "Scripts to be deployed on the device and executed when the quest was completed."
+QUEST_SUDO_PERMISSIONS[doc] = "Sudo configuration used for per-quest root privileges of the elePi user.\
+                               Only specify the part after the user and host name here (e.g. '(<user>:<group>) <command(s)>')"
 
 QUEST_DESCRIPTION      ?= "description.txt"
 QUEST_VERIFICATION_KEY ?= "verification.key"
@@ -87,6 +89,13 @@ do_install:append() {
     for cleanup_script in ${QUEST_PRERM_SCRIPTS}; do
         install -m 0755 ${WORKDIR}/${cleanup_script} ${D}${datadir}/elepi/quest/hooks/cleanup/
     done
+
+    
+    if [ -n "${QUEST_SUDO_PERMISSIONS}" ]; then
+        install -d ${D}${datadir}/elepi/quest/sudoers.d
+        echo "${ELEPI_USER} ALL = ${QUEST_SUDO_PERMISSIONS}" > ${D}${datadir}/elepi/quest/sudoers.d/${ELEPI_USER}
+        chmod 0644 ${D}${datadir}/elepi/quest/sudoers.d/${ELEPI_USER}
+    fi
 }
 
 # As setup scripts may depend on runtime properties of the system, we use the _ontarget

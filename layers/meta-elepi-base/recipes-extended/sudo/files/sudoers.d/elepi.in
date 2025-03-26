@@ -1,0 +1,8 @@
+# Commands enabled with root privileges by default
+Cmnd_Alias BOOTCONTROL    = /usr/sbin/shutdown, /usr/sbin/reboot, /usr/sbin/halt, /usr/sbin/poweroff
+Cmnd_Alias TEXTPROCESSING = /usr/bin/cat, /usr/bin/tee
+
+@@ELEPI_USER@@ ALL = NOPASSWD: BOOTCONTROL, TEXTPROCESSING
+
+# Per-quest privileges
+@includedir /usr/share/elepi/quest/sudoers.d
