@@ -84,7 +84,7 @@ class ElePiCtl:
                     'You are now ready for the next adventure.\n')
             return True, msg
 
-        msg += 'The next quest is already waiting for you:\n'
+        msg += 'The next quest is already waiting for you:\n\n'
         return True, msg + self._quest_info()
 
     def reset_quest(self) -> bool:
