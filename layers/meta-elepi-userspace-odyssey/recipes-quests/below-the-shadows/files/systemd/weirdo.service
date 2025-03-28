@@ -1,0 +1,17 @@
+[Unit]
+Description=Acting in an unexpected way
+After=user-share.mount
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=mkdir -p /tmp/oupp
+ExecStart=mkdir -p /tmp/owrk
+ExecStart=mount -t overlay oley -o lowerdir=/usr/share/ole/user,upperdir=/tmp/oupp,workdir=/tmp/owrk /usr/share/ole/user
+ExecStart=rm /usr/share/ole/user/required/logging.ini
+ExecStop=umount /usr/share/ole/user
+ExecStop=rm -rf /tmp/oupp
+ExecStop=rm -rf /tmp/owrk
+
+[Install]
+WantedBy=multi-user.target

@@ -68,33 +68,35 @@ python __anonymous() {
 }
 
 do_install:append() {
-    install -d ${D}${datadir}/elepi/quest
+    # Note: The internal data of the quest shall be hidden from all non-root users.
+    # As the elepictl application runs as root, it is enough to expose the data to root only.
+    install -d -m 0600 ${D}${datadir}/elepi/quest
 
-    install -m 0644 ${WORKDIR}/${QUEST_DESCRIPTION} ${D}${datadir}/elepi/quest/description.txt
-    install -m 0644 ${WORKDIR}/${QUEST_VERIFICATION_KEY} ${D}${datadir}/elepi/quest/verification.key
+    install -m 0600 ${WORKDIR}/${QUEST_DESCRIPTION} ${D}${datadir}/elepi/quest/description.txt
+    install -m 0600 ${WORKDIR}/${QUEST_VERIFICATION_KEY} ${D}${datadir}/elepi/quest/verification.key
 
     install -d ${D}${datadir}/elepi/quest/hints
     for hint_file in ${WORKDIR}/${QUEST_HINTS_DIR}/*; do
         if [ -f "${hint_file}" ]; then
-            install -m 0644 ${hint_file} ${D}${datadir}/elepi/quest/hints/
+            install -m 0600 ${hint_file} ${D}${datadir}/elepi/quest/hints/
         fi
     done
     
     install -d ${D}${datadir}/elepi/quest/hooks
     install -d ${D}${datadir}/elepi/quest/hooks/setup
     for setup_script in ${QUEST_POSTINST_SCRIPTS}; do
-        install -m 0755 ${WORKDIR}/${setup_script} ${D}${datadir}/elepi/quest/hooks/setup/
+        install -m 0750 ${WORKDIR}/${setup_script} ${D}${datadir}/elepi/quest/hooks/setup/
     done
     install -d ${D}${datadir}/elepi/quest/hooks/cleanup
     for cleanup_script in ${QUEST_PRERM_SCRIPTS}; do
-        install -m 0755 ${WORKDIR}/${cleanup_script} ${D}${datadir}/elepi/quest/hooks/cleanup/
+        install -m 0750 ${WORKDIR}/${cleanup_script} ${D}${datadir}/elepi/quest/hooks/cleanup/
     done
 
     
     if [ -n "${QUEST_SUDO_PERMISSIONS}" ]; then
         install -d ${D}${datadir}/elepi/quest/sudoers.d
         echo "${ELEPI_USER} ALL = ${QUEST_SUDO_PERMISSIONS}" > ${D}${datadir}/elepi/quest/sudoers.d/${ELEPI_USER}
-        chmod 0644 ${D}${datadir}/elepi/quest/sudoers.d/${ELEPI_USER}
+        chmod 0600 ${D}${datadir}/elepi/quest/sudoers.d/${ELEPI_USER}
     fi
 }
 

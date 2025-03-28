@@ -35,13 +35,13 @@ RDEPENDS:${PN} = " \
 
 do_install:append() {
     install -d ${D}${datadir}/elepi/adventure
-    install -m 0644 ${WORKDIR}/solution.token ${D}${datadir}/elepi/adventure/
+    install -m 0640 ${WORKDIR}/solution.token ${D}${datadir}/elepi/adventure/
 
     install -d ${D}${datadir}/dbus-1/system.d
-    install -m 0644 ${WORKDIR}/dbus/org.elepi.elepictl.conf ${D}${datadir}/dbus-1/system.d/
+    install -m 0640 ${WORKDIR}/dbus/org.elepi.elepictl.conf ${D}${datadir}/dbus-1/system.d/
 
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/systemd/elepid.service ${D}${systemd_system_unitdir}/
+    install -m 0640 ${WORKDIR}/systemd/elepid.service ${D}${systemd_system_unitdir}/
 }
 
 SYSTEMD_SERVICE:${PN} = "elepid.service"

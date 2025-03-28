@@ -1,0 +1,1 @@
+Overlays are only one way to merge different data locations or to allow writing on a read-only filesystem - in many cases, symlinks or bind mounts may be a better option actually.

@@ -1,0 +1,1 @@
+What happens if files get removed in an overlay?

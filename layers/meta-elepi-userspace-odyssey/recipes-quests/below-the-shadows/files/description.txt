@@ -1,3 +1,6 @@
 Facing a read-only filesystem? OverlayFS to your rescue! Or not...?
 
-...
+Especially when protecting flash memory against wear out by switching to read-only rootfs, overlays can be used to provide writable areas on the filesystem where required. Aside from that, the OverlayFS can also be used to merge data locations into a combined view. Yet, there are also some pitfalls when using overlays...
+
+For an introduction, you may consult:
+- The Linux Kernel Documentation: https://docs.kernel.org/filesystems/overlayfs.html

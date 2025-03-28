@@ -92,7 +92,7 @@ python __anonymous() {
 }
 
 do_deploy_adventure_data() {
-    install -d ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests
+    install -d -m 0600 ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests
 
     for quest in ${QUESTS_LIST}; do
         find ${DEPLOY_DIR_RPM} -type f -name "${quest}-[0-9]*.rpm" -exec cp {} ${IMAGE_ROOTFS}${datadir}/elepi/adventure/quests/${quest}.rpm ';'
