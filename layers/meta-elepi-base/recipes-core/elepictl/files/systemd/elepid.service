@@ -1,6 +1,6 @@
 [Unit]
 Description=elePi adventure control daemon
-After=network.target
+After=network.target elepi-overlays-overlays
 
 [Service]
 ExecStart=/usr/bin/elepid

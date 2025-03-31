@@ -5,6 +5,9 @@ DESCRIPTION = "The approach is to setup the overlays in a rather broad scope, as
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
+# Use a custom mount unit template with LazyUnmount (given the writable paths might still be in use) 
+OVERLAYFS_MOUNT_UNIT_TEMPLATE = "${@os.path.abspath(os.path.dirname(d.getVar('FILE')))}/files/overlayfs-unit.mount.in"
+
 inherit overlayfs
 
 # Allow writing to /usr/lib, /usr/bin and /usr/share
