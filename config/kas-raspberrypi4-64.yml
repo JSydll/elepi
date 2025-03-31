@@ -1,0 +1,34 @@
+header:
+  version: 14
+  includes:
+    - config/kas-common.yml
+
+machine: raspberrypi4-64
+
+repos:
+  # Machine specific layers
+  meta-raspberrypi:
+    url: "https://github.com/agherzan/meta-raspberrypi"
+    branch: master
+    path: layers/meta-raspberrypi
+  meta-rauc-community:
+    url: "https://github.com/rauc/meta-rauc-community"
+    branch: master
+    path: layers/meta-rauc-community
+    layers:
+      meta-rauc-raspberrypi:
+
+local_conf_header:
+  elepi-raspberrypi4-64: |
+    # MACHINE
+    # ---
+    ENABLE_UART = "1"
+    RPI_USE_U_BOOT = "1"
+
+    # Note: Account for legacy (msdos) partition table
+    OVERLAYFS_ETC_DEVICE = "/dev/mmcblk0p5"
+
+    # IMAGE
+    # ---
+    WKS_FILE = "raspberrypi-dualboot-ro-rootfs.wks.in"
+    IMAGE_FSTYPES:append = " wic.bz2 wic.bmap"

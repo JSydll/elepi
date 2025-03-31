@@ -14,19 +14,19 @@ SRC_URI += " \
 
 RDEPENDS:${PN}  += "bash"
 
-S = "${WORKDIR}/kernel-module"
+S = "${UNPACKDIR}/kernel-module"
 
 do_install:append() {
     install -d ${D}${sysconfdir}/sysctl.d
-    install -m 0644 ${WORKDIR}/sysctl.d/printk.conf ${D}${sysconfdir}/sysctl.d/
+    install -m 0644 ${UNPACKDIR}/sysctl.d/printk.conf ${D}${sysconfdir}/sysctl.d/
     
     install -d ${D}${bindir}
     # Note: The script contains a todo marker on purpose, to provide a breadcrumb to follow. 
-    install -m 0755 ${WORKDIR}/bin/honeypot.sh ${D}${bindir}/
+    install -m 0755 ${UNPACKDIR}/bin/honeypot.sh ${D}${bindir}/
     # For the sake of simplicity, we use a system service here (as systemd.bbclass can
     # only enable those by default).
     install -d ${D}${systemd_system_unitdir}
-    install -m 0644 ${WORKDIR}/systemd/honeypot.service ${D}${systemd_system_unitdir}/
+    install -m 0644 ${UNPACKDIR}/systemd/honeypot.service ${D}${systemd_system_unitdir}/
 }
 
 SYSTEMD_SERVICE:${PN} = "honeypot.service"

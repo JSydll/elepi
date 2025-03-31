@@ -18,6 +18,8 @@ QUEST_DESCRIPTION      ?= "description.txt"
 QUEST_VERIFICATION_KEY ?= "verification.key"
 QUEST_HINTS_DIR        ?= "hints"
 
+QUEST_GENERATED_POSTINST_SCRIPTS = ""
+
 SRC_URI += " \
     file://${QUEST_DESCRIPTION} \
     file://${QUEST_VERIFICATION_KEY} \
@@ -54,17 +56,23 @@ python __anonymous() {
         # installation flow.
         pkg_split_funcs.remove('split_kernel_module_packages')
         d.setVar('PACKAGESPLITFUNCS', ' '.join(pkg_split_funcs))
+
         # Satify QA checks
         libdir = d.getVar('libdir')
         d.appendVar('FILES:' + quest_name, ' ' + libdir + '/modules')
+
         # Allow easy loading of the module after runtime installation
         workdir = d.getVar('WORKDIR')
+        if not os.path.exists(workdir):
+            os.makedirs(workdir)
+        
         postinst_file = 'postinst-enable-kernel-modules.sh'
         with open(workdir + '/' + postinst_file, 'w') as f:
             f.write('''#!/bin/sh
             depmod -A
             ''')
-        d.appendVar('QUEST_POSTINST_SCRIPTS', postinst_file)
+        
+        d.appendVar('QUEST_GENERATED_POSTINST_SCRIPTS', postinst_file)
 }
 
 do_install:append() {
@@ -72,11 +80,11 @@ do_install:append() {
     # As the elepictl application runs as root, it is enough to expose the data to root only.
     install -d -m 0600 ${D}${datadir}/elepi/quest
 
-    install -m 0600 ${WORKDIR}/${QUEST_DESCRIPTION} ${D}${datadir}/elepi/quest/description.txt
-    install -m 0600 ${WORKDIR}/${QUEST_VERIFICATION_KEY} ${D}${datadir}/elepi/quest/verification.key
+    install -m 0600 ${UNPACKDIR}/${QUEST_DESCRIPTION} ${D}${datadir}/elepi/quest/description.txt
+    install -m 0600 ${UNPACKDIR}/${QUEST_VERIFICATION_KEY} ${D}${datadir}/elepi/quest/verification.key
 
     install -d ${D}${datadir}/elepi/quest/hints
-    for hint_file in ${WORKDIR}/${QUEST_HINTS_DIR}/*; do
+    for hint_file in ${UNPACKDIR}/${QUEST_HINTS_DIR}/*; do
         if [ -f "${hint_file}" ]; then
             install -m 0600 ${hint_file} ${D}${datadir}/elepi/quest/hints/
         fi
@@ -85,11 +93,14 @@ do_install:append() {
     install -d ${D}${datadir}/elepi/quest/hooks
     install -d ${D}${datadir}/elepi/quest/hooks/setup
     for setup_script in ${QUEST_POSTINST_SCRIPTS}; do
-        install -m 0750 ${WORKDIR}/${setup_script} ${D}${datadir}/elepi/quest/hooks/setup/
+        install -m 0750 ${UNPACKDIR}/${setup_script} ${D}${datadir}/elepi/quest/hooks/setup/
+    done
+    for generated_setup_script in ${QUEST_GENERATED_POSTINST_SCRIPTS}; do
+        install -m 0750 ${WORKDIR}/${generated_setup_script} ${D}${datadir}/elepi/quest/hooks/setup/
     done
     install -d ${D}${datadir}/elepi/quest/hooks/cleanup
     for cleanup_script in ${QUEST_PRERM_SCRIPTS}; do
-        install -m 0750 ${WORKDIR}/${cleanup_script} ${D}${datadir}/elepi/quest/hooks/cleanup/
+        install -m 0750 ${UNPACKDIR}/${cleanup_script} ${D}${datadir}/elepi/quest/hooks/cleanup/
     done
 
     

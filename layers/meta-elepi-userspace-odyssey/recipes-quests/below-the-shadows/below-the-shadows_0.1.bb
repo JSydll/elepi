@@ -14,7 +14,7 @@ SRC_URI += " \
 
 QUEST_SUDO_PERMISSIONS = "NOPASSWD: /usr/bin/mount, /usr/bin/umount, /usr/bin/bash"
 
-S = "${WORKDIR}/sources"
+S = "${UNPACKDIR}/sources"
 
 EXTRA_OECMAKE = ""
 
@@ -22,15 +22,15 @@ do_install:append() {
     install -d ${D}${datadir}/ole
 
     install -d ${D}${datadir}/ole/defaults
-    install -m 0644 ${WORKDIR}/configs/app.ini ${D}${datadir}/ole/defaults/
+    install -m 0644 ${UNPACKDIR}/configs/app.ini ${D}${datadir}/ole/defaults/
 
     install -d ${D}${datadir}/ole/user
     install -d ${D}${datadir}/ole/user/required
-    install -m 0666 ${WORKDIR}/configs/logging.ini ${D}${datadir}/ole/user/required/
+    install -m 0666 ${UNPACKDIR}/configs/logging.ini ${D}${datadir}/ole/user/required/
     install -d -m 0777 ${D}${datadir}/ole/user/extra
 
     install -d ${D}${systemd_system_unitdir}
-    install -m 0640 ${WORKDIR}/systemd/weirdo.service ${D}${systemd_system_unitdir}/
+    install -m 0640 ${UNPACKDIR}/systemd/weirdo.service ${D}${systemd_system_unitdir}/
 }
 
 SYSTEMD_SERVICE:${PN} = "weirdo.service"

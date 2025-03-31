@@ -10,9 +10,9 @@ SRC_URI += " \
 "
 
 do_configure:append() {
-    sed -e "s|@@ELEPI_USER@@|${ELEPI_USER}|" "${WORKDIR}/sudoers.d/elepi.in" > "${WORKDIR}/sudoers.d/elepi"
+    sed -e "s|@@ELEPI_USER@@|${ELEPI_USER}|" "${UNPACKDIR}/sudoers.d/elepi.in" > "${WORKDIR}/elepi.sudoers"
 }
 
 do_install:append() {
-    install -m 0644 ${WORKDIR}/sudoers.d/elepi ${D}${sysconfdir}/sudoers.d/elepi
+    install -m 0644 ${WORKDIR}/elepi.sudoers ${D}${sysconfdir}/sudoers.d/elepi
 }

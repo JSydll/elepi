@@ -1,14 +1,13 @@
 header:
   version: 14
 
-machine: raspberrypi4-64
 distro: poky
 
 defaults:
   repos:
-    branch: scarthgap
-
+    branch: styhead
 repos:
+  # Shared layers
   poky:
     url: "https://git.yoctoproject.org/git/poky"
     path: layers/poky
@@ -21,17 +20,9 @@ repos:
     layers:
       meta-oe:
       meta-python:
-  meta-raspberrypi:
-    url: "https://github.com/agherzan/meta-raspberrypi"
-    path: layers/meta-raspberrypi
   meta-rauc:
     url: "https://github.com/rauc/meta-rauc.git"
     path: layers/meta-rauc
-  meta-rauc-community:
-    url: "https://github.com/rauc/meta-rauc-community"
-    path: layers/meta-rauc-community
-    layers:
-      meta-rauc-raspberrypi:
 
   elepi:
     layers:
@@ -43,18 +34,14 @@ target:
   #- update-bundle
 
 local_conf_header:
-  meta-custom: |
+  elepi-common: |
     # GENERAL
     # ---
     PACKAGE_CLASSES = "package_rpm"
 
     hostname:pn-base-files = "elepi"
-    DISTRO_NAME:pn-base-files = "elepi-os"
-
-    # MACHINE
-    # ---
-    ENABLE_UART = "1"
-    RPI_USE_U_BOOT = "1"
+    DISTRO_NAME:pn-base-files = "elepi-adventure"
+    DISTRO_VERSION:pn-base-files = "0.1-beta"
 
     # DISTRO
     # ---

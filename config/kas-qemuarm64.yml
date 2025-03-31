@@ -1,0 +1,50 @@
+header:
+  version: 14
+  includes:
+    - config/kas-common.yml
+
+machine: qemuarm64
+
+repos:
+  # Machine specific layers
+  poky:
+    layers:
+      meta-yocto-bsp:
+  meta-rauc-community:
+    url: "https://github.com/rauc/meta-rauc-community"
+    branch: master
+    path: layers/meta-rauc-community
+    layers:
+      meta-rauc-qemuarm:
+
+local_conf_header:
+  elepi-qemuarm64: |
+    # MACHINE
+    # ---
+    PREFERRED_PROVIDER_virtual/bootloader = "u-boot"
+
+    OVERLAYFS_ETC_DEVICE = "/dev/vda4"
+
+    QB_DEFAULT_BIOS:qemuarm64 = "u-boot.bin"
+    QB_ROOTFS_OPT:qemuarm64 = "-drive id=disk0,file=@ROOTFS@,if=none,format=qcow2 -device virtio-blk-device,drive=disk0"
+    QB_OPT_APPEND:qemuarm64 += " -drive if=pflash,format=raw,index=1,file=${TMPDIR}/deploy/images/${MACHINE}/bootenv.img"
+    QB_MEM:qemuarm64 = "-m 3G"
+
+    # DISTRO
+    # ---
+    PREFERRED_RPROVIDER_u-boot-default-env = "libubootenv"
+
+    # IMAGE
+    # ---
+    WKS_FILE = "qemuarm-dualboot-ro-rootfs.wks"
+    IMAGE_FSTYPES:append = " wic.qcow2"
+
+    IMAGE_INSTALL:append = " \
+        u-boot-fw-utils \
+        u-boot-default-env \
+        kernel-image \
+        kernel-devicetree \
+        mtd-utils \
+    "
+
+    IMAGE_BOOT_FILES = "boot.scr"

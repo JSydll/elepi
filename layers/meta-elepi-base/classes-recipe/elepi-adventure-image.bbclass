@@ -19,8 +19,7 @@ inherit extrausers
 # Setup /etc overlay for read-only rootfs
 OVERLAYFS_ETC_MOUNT_POINT = "/data"
 OVERLAYFS_ETC_FSTYPE = "ext4"
-# Note: Account for legacy (msdos) partition table
-OVERLAYFS_ETC_DEVICE = "/dev/mmcblk0p5"
+# OVERLAYFS_ETC_DEVICE must be set on local.conf level
 OVERLAYFS_ETC_USE_ORIG_INIT_NAME = "0"
 
 # Setup unprivileged user
@@ -41,19 +40,16 @@ IMAGE_FEATURES += " \
 
 IMAGE_INSTALL = " \
     packagegroup-core-boot \
-    ${CORE_IMAGE_EXTRA_INSTALL} \
     \
     sudo \
     rauc \
+    e2fsprogs-mke2fs \
     \
     elepi-overlays \
     elepictl \
 "
 
-IMAGE_FSTYPES:remove = " ext3 ext4"
-IMAGE_FSTYPES:append = " squashfs"
-
-WKS_FILE = "dual-ro-rootfs-raspberrypi.wks.in"
+IMAGE_FSTYPES = "tar.bz2 squashfs"
 
 python __anonymous() {
     # As bitbake variable expansion does not support quoted strings well,

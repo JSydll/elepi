@@ -36,7 +36,7 @@ which will automatically bring up the next quest for you.
 
 ## Getting started
 
-What you'll need:
+What you'll need (for the hands-on, hardware setup):
 
 - RaspberryPi 4 and SD card
 - USB-to-Serial adapter
@@ -44,6 +44,8 @@ What you'll need:
 - means to flash the adventure on the card
 
 Then, start by flashing the adventure image on the SD card and connecting everything.
+
+If you have no hardware around, there are - for some adventures - QEMU ARM images available.
 
 As soon as the system has booted, you can login with `somebody` and the password `fortytwo`.
 

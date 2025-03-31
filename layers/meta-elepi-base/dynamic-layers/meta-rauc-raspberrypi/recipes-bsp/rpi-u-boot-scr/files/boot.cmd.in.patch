@@ -8,7 +8,7 @@ diff --git a/boot.cmd.in b/boot.cmd.in
 index 61d0acf..de0cefb 100644
 --- a/boot.cmd.in
 +++ b/boot.cmd.in
-@@ -31,7 +31,7 @@ for BOOT_SLOT in "${BOOT_ORDER}"; do
+@@ -31,7 +31,7 @@
  done
  
  if test -n "${bootpart}"; then
@@ -17,3 +17,12 @@ index 61d0acf..de0cefb 100644
    saveenv
  else
    echo "No valid RAUC slot found. Resetting tries to 3"
+@@ -41,6 +41,6 @@
+   reset
+ fi
+ 
+-load ${BOOT_DEV} ${kernel_addr_r} boot/@@KERNEL_IMAGETYPE@@
++sqfsload ${BOOT_DEV} ${kernel_addr_r} /boot/@@KERNEL_IMAGETYPE@@
+ if test ! -e mmc 0:1 uboot.env; then saveenv; fi;
+ @@KERNEL_BOOTCMD@@ ${kernel_addr_r} - ${fdt_addr}
+ 
